@@ -1,0 +1,3 @@
+languages: "eng+rus"
+max_db_size_mb: 20000
+screenshot_period_sec: 30

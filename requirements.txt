@@ -1,0 +1,4 @@
+packaging==24.1
+pillow==10.3.0
+pytesseract==0.3.10
+PyYAML==6.0.1

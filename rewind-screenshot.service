@@ -1,0 +1,10 @@
+[Unit]
+Description=Rewind Screenshot Service
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/python -m rewind.screenshot_service
+Restart=always
+
+[Install]
+WantedBy=default.target
