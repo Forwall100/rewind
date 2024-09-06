@@ -68,8 +68,8 @@ The configuration file is located at `~/.config/rewind/config.yaml`. You can con
 - **languages**: Languages for text recognition. Default is `eng+rus`. Multiple languages are indicated by a '+'.
 - **max_db_size_mb**: Maximum size of the database in megabytes. Default is `20000`.
 - **screenshot_period_sec**: Period between screenshots in seconds. Default is `30`.
-- **similarity_threshold**: Threshold for image similarity (0.0 to 1.0). Default is `0.9`. Higher values mean images need to be more similar to be considered duplicates.
-- **text_similarity_threshold**: Threshold for text similarity (0.0 to 1.0). Default is `0.8`. Higher values mean extracted text needs to be more similar to be considered duplicates.
+- **similarity_threshold**: Threshold for image similarity (0.0 to 1.0). Default is `0.9`. This threshold determines how similar two images must be to be considered duplicates. The value ranges from 0.0 to 1.0, where 1.0 means the images must be identical. A value of 0.9 allows for slight differences (like cursor movement or clock changes) while still catching most duplicates.
+- **text_similarity_threshold**: Threshold for text similarity (0.0 to 1.0). Default is `0.8`. Similar to the image similarity threshold, but for the extracted text. This helps catch cases where the images might be slightly different, but the text content is essentially the same. A value of 0.8 allows for small differences in recognized text while still catching most duplicates.
 
 ### Example of `config.yaml`
 
@@ -80,18 +80,6 @@ screenshot_period_sec: 30
 similarity_threshold: 0.9
 text_similarity_threshold: 0.8
 ```
-
-### Detailed explanation of configuration parameters:
-
-- **languages**: Specifies the languages that Tesseract OCR should use for text recognition. You can add multiple languages by separating them with a '+' symbol. For example, "eng+rus" will recognize both English and Russian text.
-
-- **max_db_size_mb**: Sets the maximum size of the SQLite database in megabytes. When this limit is reached, the oldest screenshots will be deleted to make room for new ones.
-
-- **screenshot_period_sec**: Determines how often Rewind takes screenshots, in seconds. A lower value means more frequent screenshots but also higher resource usage and faster database growth.
-
-- **similarity_threshold**: This threshold determines how similar two images must be to be considered duplicates. The value ranges from 0.0 to 1.0, where 1.0 means the images must be identical. A value of 0.9 allows for slight differences (like cursor movement or clock changes) while still catching most duplicates.
-
-- **text_similarity_threshold**: Similar to the image similarity threshold, but for the extracted text. This helps catch cases where the images might be slightly different, but the text content is essentially the same. A value of 0.8 allows for small differences in recognized text while still catching most duplicates.
 
 > [!CAUTION]
 > Restart systemd service `rewind-screenshot.service` to make the config changes take effect
