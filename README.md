@@ -68,6 +68,9 @@ The configuration file is located at the path `~/.config/rewind/config.yaml'. Yo
 - **max_db_size_mb**: The maximum size of the database in megabytes. The default is `20000`.
 -**screenshot_period_sec**: The period between screenshots in seconds. The default is `30`.
 
+> [!CAUTION]
+> Restart systemd service ```rewind-screenshot.service``` to make the config changes take effect
+
 ### Example of `config.yaml`
 
 ```yaml
