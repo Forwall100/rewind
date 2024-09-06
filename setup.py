@@ -8,6 +8,9 @@ setup(
         "pillow",
         "pytesseract",
         "pyyaml",
+        "numpy",
+        "python-Levenshtein",
+        "scipy",
     ],
     entry_points={
         "console_scripts": [

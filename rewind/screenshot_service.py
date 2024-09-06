@@ -9,7 +9,9 @@ import io
 import yaml
 import json
 import configparser
-import hashlib
+import numpy as np
+from scipy.fftpack import dct
+from Levenshtein import distance as levenshtein_distance
 
 config_dir = os.path.expanduser("~/.config/rewind")
 if not os.path.exists(config_dir):
@@ -38,6 +40,8 @@ def load_config():
         "languages": "eng+rus",
         "max_db_size_mb": 20_000,
         "screenshot_period_sec": 30,
+        "similarity_threshold": 0.9,
+        "text_similarity_threshold": 0.8,
     }
 
 
@@ -45,6 +49,9 @@ config = load_config()
 languages = config.get("languages", "eng+rus")
 max_db_size_mb = int(config.get("max_db_size_mb", 1000))
 screenshot_period_sec = int(config.get("screenshot_period_sec", 30))
+similarity_threshold = float(config.get("similarity_threshold", 0.9))
+text_similarity_threshold = float(config.get("text_similarity_threshold", 0.8))
+
 
 conn = sqlite3.connect(db_path, check_same_thread=False)
 cursor = conn.cursor()
@@ -56,7 +63,7 @@ cursor.execute(
         image BLOB,
         text TEXT,
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-        hash TEXT
+        phash TEXT
     )
 """
 )
@@ -107,24 +114,53 @@ def delete_oldest_record():
     conn.commit()
 
 
-def calculate_image_hash(image_blob):
-    return hashlib.md5(image_blob).hexdigest()
+def calculate_phash(image_blob, hash_size=8):
+    image = (
+        Image.open(io.BytesIO(image_blob))
+        .convert("L")
+        .resize((hash_size * 4, hash_size * 4), Image.LANCZOS)
+    )
+    pixels = np.array(image, dtype=np.float32)
+    dct_result = dct(dct(pixels, axis=0), axis=1)
+    dct_low = dct_result[:hash_size, :hash_size]
+    med = np.median(dct_low)
+    hash_bits = (dct_low > med).flatten()
+    return "".join(["1" if b else "0" for b in hash_bits])
 
 
-def is_duplicate_image(image_hash):
-    cursor.execute("SELECT COUNT(*) FROM screenshots WHERE hash = ?", (image_hash,))
-    count = cursor.fetchone()[0]
-    return count > 0
+def hamming_distance(hash1, hash2):
+    return sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
+
+
+def is_similar_image(phash, text):
+    cursor.execute(
+        "SELECT phash, text FROM screenshots ORDER BY timestamp DESC LIMIT 10"
+    )
+    recent_screenshots = cursor.fetchall()
+
+    for recent_phash, recent_text in recent_screenshots:
+        if recent_phash is None or recent_text is None:
+            continue
+
+        hash_similarity = 1 - hamming_distance(phash, recent_phash) / len(phash)
+        if hash_similarity >= similarity_threshold:
+            text_similarity = 1 - levenshtein_distance(text, recent_text) / max(
+                len(text), len(recent_text)
+            )
+            if text_similarity >= text_similarity_threshold:
+                return True
+
+    return False
 
 
 def save_to_database(image_blob, text):
     if image_blob is None:
         return
 
-    image_hash = calculate_image_hash(image_blob)
+    phash = calculate_phash(image_blob)
 
-    if is_duplicate_image(image_hash):
-        print("Duplicate image detected. Skipping...")
+    if is_similar_image(phash, text):
+        print("Similar image detected. Skipping...")
         return
 
     while get_db_size() >= max_db_size_mb:
@@ -132,10 +168,10 @@ def save_to_database(image_blob, text):
 
     cursor.execute(
         """
-        INSERT INTO screenshots (image, text, hash)
+        INSERT INTO screenshots (image, text, phash)
         VALUES (?, ?, ?)
     """,
-        (image_blob, text, image_hash),
+        (image_blob, text, phash),
     )
     conn.commit()
 

@@ -1,4 +1,6 @@
-packaging==24.1
-pillow==10.3.0
-pytesseract==0.3.10
-PyYAML==6.0.1
+numpy==2.1.1
+pillow==10.4.0
+pytesseract==0.3.13
+python-Levenshtein==0.25.1
+PyYAML==6.0.2
+scipy==1.14.1

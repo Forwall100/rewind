@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m rewind.rewind
+python3 -m rewind.rewind

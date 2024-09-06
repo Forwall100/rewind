@@ -1,3 +1,5 @@
 languages: "eng+rus"
 max_db_size_mb: 20000
 screenshot_period_sec: 30
+similarity_threshold: 0.9
+text_similarity_threshold: 0.8
