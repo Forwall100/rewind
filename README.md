@@ -16,6 +16,40 @@ Rewind is an application that periodically takes screenshots of your computer sc
 - **Duplicate Prevention**: Uses perceptual hashing (pHash) and text similarity to prevent saving near-duplicate screenshots.
 - **Console Application**: Allows you to search by screenshots in the console.
 
+## Diagram 📊
+```mermaid
+flowchart TD
+    A["Background Service (rewind-screenshot.service)"]:::service
+    subgraph "Screenshot Capture Module"
+        B["Main Controller (rewind.py)"]:::capture
+        C["Screenshot Service (screenshot_service.py)"]:::capture
+    end
+    D["OCR & Duplicate Prevention Module (Tesseract & pHash)"]:::processing
+    E["Database Storage (SQLite DB)"]:::database
+    F["Console UI (Search & Navigation)"]:::ui
+    G["Configuration (config.yaml)"]:::config
+    H["External Screenshot Utility (grim/scrot)"]:::external
+    I["External OCR Engine (Tesseract)"]:::external
+
+    A -->|"launches"| B
+    B -->|"triggers"| C
+    C -->|"captures_and_sends"| D
+    D -->|"saves_data_to"| E
+    E -->|"queried_by"| F
+    G -->|"configures"| B
+    G -->|"configures"| D
+    C -->|"uses"| H
+    D -->|"integrates"| I
+
+    click A "https://github.com/forwall100/rewind/blob/main/rewind-screenshot.service"
+    click B "https://github.com/forwall100/rewind/blob/main/rewind/rewind.py"
+    click C "https://github.com/forwall100/rewind/blob/main/rewind/screenshot_service.py"
+    click G "https://github.com/forwall100/rewind/blob/main/config.yaml"
+    click E "https://github.com/forwall100/rewind/blob/main/~/.config/rewind/screenshots.db"
+
+    classDef external fill:#000000,stroke:#888888,stroke-dasharray:5,stroke-width:2px;
+```
+
 ## Installation 🛠️
 
 To install Rewind on Arch Linux, follow these steps:
