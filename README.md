@@ -47,7 +47,13 @@ flowchart TD
     click G "https://github.com/forwall100/rewind/blob/main/config.yaml"
     click E "https://github.com/forwall100/rewind/blob/main/~/.config/rewind/screenshots.db"
 
-    classDef external fill:#000000,stroke:#888888,stroke-dasharray:5,stroke-width:2px;
+    classDef service fill:#f6d365,stroke:#e39a3b,stroke-width:2px;
+    classDef capture fill:#cfc,stroke:#080,stroke-width:2px;
+    classDef processing fill:#cceeff,stroke:#0044cc,stroke-width:2px;
+    classDef database fill:#fadadd,stroke:#ff69b4,stroke-width:2px;
+    classDef ui fill:#ffedcc,stroke:#ffaa00,stroke-width:2px;
+    classDef config fill:#e0e0e0,stroke:#bbbbbb,stroke-width:2px;
+    classDef external fill:#eeeeee,stroke:#888888,stroke-dasharray:5,stroke-width:2px;
 ```
 
 ## Installation 🛠️
