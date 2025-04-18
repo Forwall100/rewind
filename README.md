@@ -47,13 +47,13 @@ flowchart TD
     click G "https://github.com/forwall100/rewind/blob/main/config.yaml"
     click E "https://github.com/forwall100/rewind/blob/main/~/.config/rewind/screenshots.db"
 
-    classDef service fill:#f6d365,stroke:#e39a3b,stroke-width:2px;
-    classDef capture fill:#cfc,stroke:#080,stroke-width:2px;
-    classDef processing fill:#cceeff,stroke:#0044cc,stroke-width:2px;
-    classDef database fill:#fadadd,stroke:#ff69b4,stroke-width:2px;
-    classDef ui fill:#ffedcc,stroke:#ffaa00,stroke-width:2px;
-    classDef config fill:#e0e0e0,stroke:#bbbbbb,stroke-width:2px;
-    classDef external fill:#eeeeee,stroke:#888888,stroke-dasharray:5,stroke-width:2px;
+    classDef service fill:#ffcc00,stroke:#b38600,stroke-width:2px,color:#000;
+    classDef capture fill:#66ff66,stroke:#009900,stroke-width:2px,color:#000;
+    classDef processing fill:#00ccff,stroke:#0066cc,stroke-width:2px,color:#000;
+    classDef database fill:#ff9999,stroke:#ff1a1a,stroke-width:2px,color:#000;
+    classDef ui fill:#ffcc99,stroke:#e69500,stroke-width:2px,color:#000;
+    classDef config fill:#cccccc,stroke:#777777,stroke-width:2px,color:#000;
+    classDef external fill:#ffffff,stroke:#555555,stroke-dasharray:5,stroke-width:2px,color:#000;
 ```
 
 ## Installation 🛠️
